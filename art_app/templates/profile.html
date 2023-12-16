@@ -1,0 +1,24 @@
+<!-- profile.html -->
+
+{% extends 'base.html' %} {% block content %}
+<h2>Welcome, {{ user.username }}!</h2>
+
+<!-- Display user-related info -->
+
+{% if user.is_authenticated %}
+<h3>Your Favorites</h3>
+{% if user.favorite_set.all %}
+<ul>
+  {% for favorite in user.favorite_set.all %}
+  <li>
+    <a href="{% url 'art_detail' favorite.art_piece.id %}"
+      >{{ favorite.art_piece.title }}</a
+    >
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>No favorites yet.</p>
+{% endif %} {% else %}
+<p>Login to view your profile.</p>
+{% endif %} {% endblock %}

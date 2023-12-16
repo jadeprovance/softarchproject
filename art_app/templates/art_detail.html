@@ -1,0 +1,45 @@
+{% extends 'base.html' %} {% block content %}
+<h2>{{ art_piece.title }}</h2>
+<img src="{{ art_piece.image_url }}" alt="{{ art_piece.title }}" />
+<p>{{ art_piece.description }}</p>
+<p>Artist: {{ art_piece.artist }}</p>
+<p>Date: {{ art_piece.date }}</p>
+
+<!-- Add to Favorites Button -->
+{% if request.user.is_authenticated %}
+<form action="{% url 'add_to_favorites' art_piece.id %}" method="post">
+  {% csrf_token %}
+  <button type="submit">Add to Favorites</button>
+</form>
+{% endif %}
+
+<!-- Remove from Favorites Button -->
+{% if request.user.is_authenticated %}
+<form action="{% url 'remove_from_favorites' art_piece.id %}" method="post">
+  {% csrf_token %}
+  <button type="submit">Remove from Favorites</button>
+</form>
+{% endif %}
+
+<!-- Comment Form -->
+{% if request.user.is_authenticated %}
+<form action="{% url 'add_comment' art_piece.id %}" method="post">
+  {% csrf_token %}
+  <textarea
+    name="text"
+    cols="30"
+    rows="2"
+    placeholder="Add your comment"
+  ></textarea>
+  <button type="submit">Add Comment</button>
+</form>
+{% endif %}
+
+<!-- Comments Section -->
+<h3>Comments</h3>
+<div id="commentsContainer">
+  {% for comment in comments %}
+  <p>{{ comment }}</p>
+  {% endfor %}
+</div>
+{% endblock %}

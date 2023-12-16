@@ -1,0 +1,41 @@
+{% extends 'base.html' %} {% block content %}
+<h2>Welcome to the Art Generator</h2>
+<button id="generateArtButton">Generate Art</button>
+<div id="artContainer"></div>
+
+<!-- Link to user profile -->
+<a href="{% url 'profile' %}">Visit Your Profile</a>
+
+<script>
+  document
+    .getElementById("generateArtButton")
+    .addEventListener("click", function () {
+      generateArt();
+    });
+
+  function generateArt() {
+    fetch("/generate_art/")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Art pieces data:", data);
+
+        const artHtml = data.art_pieces
+          .map(
+            (artPiece) => `
+                      <div>
+                          <h3>${artPiece.title}</h3>
+                          <img src="${artPiece.image_url}" alt="${artPiece.title}" />
+                          <!-- Add other details as needed -->
+                      </div>
+                  `
+          )
+          .join("");
+
+        document.getElementById("artContainer").innerHTML = artHtml;
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
+</script>
+{% endblock %}
